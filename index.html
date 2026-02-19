@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bocco — Termini di Servizio</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --brand: #2D8C4E;
+            --brand-light: #E8F5EC;
+            --text: #1A1A1A;
+            --text-secondary: #6B7280;
+            --bg: #FAFBFC;
+            --card: #FFFFFF;
+            --border: #E5E7EB;
+        }
+
+        body {
+            font-family: 'DM Sans', -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .header {
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .header-inner {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .header-inner span {
+            font-size: 1.5rem;
+        }
+
+        .header-inner h1 {
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--brand-light);
+            color: var(--brand);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            margin-bottom: 1rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .last-updated {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--brand);
+        }
+
+        .section p {
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .section ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 0.75rem;
+        }
+
+        .section ul li {
+            position: relative;
+            padding-left: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.375rem;
+        }
+
+        .section ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.6rem;
+            width: 6px;
+            height: 6px;
+            background: var(--brand);
+            border-radius: 50%;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-card {
+            background: #FFF7ED;
+            border: 1px solid #F59E0B;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-card h3 {
+            color: #B45309;
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-card p {
+            color: #92400E;
+        }
+
+        .contact-card {
+            background: var(--brand-light);
+            border: 1px solid var(--brand);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .contact-card h3 {
+            color: var(--brand);
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card a {
+            color: var(--brand);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-card a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.8125rem;
+            border-top: 1px solid var(--border);
+        }
+
+        a { color: var(--brand); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-inner">
+            <span>🥦</span>
+            <h1>Bocco</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <span class="badge">Documento legale</span>
+        <h1 class="page-title">Termini di Servizio</h1>
+        <p class="last-updated">Ultimo aggiornamento: 19 febbraio 2026</p>
+
+        <div class="section">
+            <h2>1. Accettazione dei termini</h2>
+            <p>Utilizzando l'applicazione Bocco ("l'App", "il Servizio"), accetti di essere vincolato dai presenti Termini di Servizio. Se non accetti questi termini, ti preghiamo di non utilizzare l'App.</p>
+        </div>
+
+        <div class="section">
+            <h2>2. Descrizione del servizio</h2>
+            <p>Bocco è un'applicazione mobile per:</p>
+            <ul>
+                <li>Monitorare gli alimenti nella tua dispensa</li>
+                <li>Tracciare le date di scadenza degli alimenti</li>
+                <li>Scansionare scontrini e codici a barre per aggiungere alimenti</li>
+                <li>Gestire una lista della spesa</li>
+                <li>Visualizzare statistiche sul consumo e sullo spreco alimentare</li>
+            </ul>
+            <p>L'obiettivo è aiutarti a ridurre lo spreco alimentare domestico.</p>
+        </div>
+
+        <div class="section">
+            <h2>3. Account utente</h2>
+            <ul>
+                <li>Devi avere almeno 16 anni per utilizzare Bocco</li>
+                <li>Sei responsabile della sicurezza del tuo account e della tua password</li>
+                <li>Devi fornire un indirizzo email valido per la registrazione</li>
+                <li>Puoi eliminare il tuo account in qualsiasi momento dalle impostazioni dell'app</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>4. Piano gratuito e piano Pro</h2>
+            <div class="card">
+                <h3>Piano gratuito</h3>
+                <ul>
+                    <li>Gestione dispensa illimitata</li>
+                    <li>Inserimento manuale e scansione barcode</li>
+                    <li>Fino a 3 scansioni scontrino al mese</li>
+                    <li>Statistiche base</li>
+                    <li>Lista della spesa</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Piano Pro</h3>
+                <ul>
+                    <li>Scansioni scontrino illimitate</li>
+                    <li>Ricette suggerite basate sulla dispensa</li>
+                    <li>Funzionalità aggiuntive future</li>
+                </ul>
+                <p>Il piano Pro è disponibile tramite abbonamento in-app. I prezzi sono indicati nell'App Store e possono variare.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>5. Abbonamenti e pagamenti</h2>
+            <ul>
+                <li>Gli abbonamenti Pro vengono gestiti tramite Apple App Store</li>
+                <li>Il rinnovo è automatico salvo cancellazione almeno 24 ore prima della scadenza</li>
+                <li>Puoi gestire o cancellare l'abbonamento dalle impostazioni del tuo ID Apple</li>
+                <li>Non offriamo rimborsi diretti; i rimborsi sono gestiti secondo le policy di Apple</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>6. Uso corretto</h2>
+            <p>Utilizzando Bocco, accetti di:</p>
+            <ul>
+                <li>Non utilizzare l'App per scopi illegali o non autorizzati</li>
+                <li>Non tentare di accedere ai dati di altri utenti</li>
+                <li>Non sovraccaricare intenzionalmente i nostri server</li>
+                <li>Non caricare contenuti offensivi, illegali o dannosi</li>
+                <li>Non tentare di decompilare o reverse-engineering dell'App</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>7. Scansione scontrini e intelligenza artificiale</h2>
+            <div class="highlight-card">
+                <h3>⚠️ Importante</h3>
+                <p>La scansione degli scontrini utilizza intelligenza artificiale per identificare gli alimenti. I risultati sono stime e potrebbero contenere errori. Verifica sempre gli alimenti identificati prima di confermarli. Le date di scadenza suggerite sono indicative e basate su medie statistiche.</p>
+            </div>
+            <p>Bocco non è responsabile per decisioni alimentari basate sulle stime fornite dall'App. In caso di dubbio sulla sicurezza di un alimento, scartalo.</p>
+        </div>
+
+        <div class="section">
+            <h2>8. Proprietà intellettuale</h2>
+            <p>L'App, il suo design, il codice, i contenuti e il marchio Bocco sono di proprietà del titolare. Non è consentito copiare, modificare, distribuire o creare opere derivate senza autorizzazione scritta.</p>
+        </div>
+
+        <div class="section">
+            <h2>9. Limitazione di responsabilità</h2>
+            <p>Bocco è fornito "così com'è" senza garanzie di alcun tipo. Non siamo responsabili per:</p>
+            <ul>
+                <li>Perdite di dati dovute a malfunzionamenti tecnici</li>
+                <li>Decisioni alimentari basate sulle informazioni dell'App</li>
+                <li>Indisponibilità temporanea del servizio</li>
+                <li>Errori nelle stime di scadenza o nell'identificazione degli alimenti</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>10. Interruzione del servizio</h2>
+            <p>Ci riserviamo il diritto di sospendere o terminare l'accesso al servizio in caso di violazione dei presenti termini, con preavviso ragionevole quando possibile.</p>
+        </div>
+
+        <div class="section">
+            <h2>11. Modifiche ai termini</h2>
+            <p>Possiamo modificare questi Termini di Servizio in qualsiasi momento. Le modifiche significative verranno comunicate tramite l'app. L'uso continuato del servizio dopo la notifica costituisce accettazione dei nuovi termini.</p>
+        </div>
+
+        <div class="section">
+            <h2>12. Legge applicabile</h2>
+            <p>I presenti Termini sono regolati dalla legge italiana. Per qualsiasi controversia sarà competente il foro di Milano, Italia.</p>
+        </div>
+
+        <div class="contact-card">
+            <h3>📬 Contattaci</h3>
+            <p>Per qualsiasi domanda sui Termini di Servizio, scrivici a:<br>
+            <a href="mailto:info@boccoapp.com">info@boccoapp.com</a></p>
+        </div>
+    </div>
+
+    <div class="footer">
+        © 2026 Bocco. Tutti i diritti riservati.
+    </div>
+</body>
+</html>
