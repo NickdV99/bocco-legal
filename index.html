@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bocco — Smetti di buttare cibo</title>
+<meta name="description" content="Bocco ti aiuta a usare tutto quello che compri. Meno spreco, più risparmio. Iscriviti per l'accesso anticipato.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Newsreader:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --brand: #4A9E6B;
+    --brand-light: #7BC896;
+    --brand-glow: rgba(74, 158, 107, 0.15);
+    --bg: #080C09;
+    --surface: #111914;
+    --surface-2: #1a2420;
+    --border: rgba(74, 158, 107, 0.12);
+    --text: #E8EDE9;
+    --text-secondary: rgba(232, 237, 233, 0.5);
+    --text-tertiary: rgba(232, 237, 233, 0.25);
+    --red: #E05C5C;
+    --orange: #D4913A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Ambient glow */
+  .glow-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .glow-1 {
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(74,158,107,0.08) 0%, transparent 70%);
+    top: -200px; left: -200px;
+  }
+
+  .glow-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(74,158,107,0.06) 0%, transparent 70%);
+    bottom: -100px; right: -100px;
+  }
+
+  /* Layout */
+  .container {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Nav */
+  nav {
+    padding: 24px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo-icon {
+    font-size: 28px;
+    filter: drop-shadow(0 0 12px rgba(74,158,107,0.4));
+  }
+
+  .logo-text {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--brand), var(--brand-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .badge-soon {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--brand);
+    background: var(--brand-glow);
+    border: 1px solid var(--border);
+    padding: 4px 12px;
+    border-radius: 100px;
+  }
+
+  /* Hero */
+  .hero {
+    padding: 80px 0 48px;
+    text-align: center;
+  }
+
+  .hero-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(224, 92, 92, 0.08);
+    border: 1px solid rgba(224, 92, 92, 0.15);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--red);
+    margin-bottom: 32px;
+    animation: fadeInUp 0.8s ease both;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 8vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    margin-bottom: 20px;
+    animation: fadeInUp 0.8s ease 0.1s both;
+  }
+
+  .hero h1 .highlight {
+    background: linear-gradient(135deg, var(--brand), var(--brand-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 420px;
+    margin: 0 auto;
+    animation: fadeInUp 0.8s ease 0.2s both;
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: flex;
+    gap: 12px;
+    margin: 48px 0;
+    animation: fadeInUp 0.8s ease 0.3s both;
+  }
+
+  .stat-card {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 12px;
+    text-align: center;
+  }
+
+  .stat-emoji { font-size: 24px; margin-bottom: 8px; }
+
+  .stat-value {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .stat-value.red { color: var(--red); }
+  .stat-value.orange { color: var(--orange); }
+  .stat-value.green { color: var(--brand); }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    margin-top: 4px;
+  }
+
+  /* Form section */
+  .form-section {
+    animation: fadeInUp 0.8s ease 0.4s both;
+  }
+
+  .form-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px 28px;
+  }
+
+  .form-title {
+    font-size: 20px;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  .form-subtitle {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(255,255,255,0.06);
+    background: var(--surface-2);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .form-input:focus {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px var(--brand-glow);
+  }
+
+  .form-input::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  /* Radio/option pills */
+  .options-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .option-pill {
+    position: relative;
+  }
+
+  .option-pill input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .option-pill label {
+    display: block;
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(255,255,255,0.06);
+    background: var(--surface-2);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .option-pill input:checked + label {
+    border-color: var(--brand);
+    background: var(--brand-glow);
+    color: var(--brand-light);
+    box-shadow: 0 0 0 3px var(--brand-glow);
+  }
+
+  .option-pill label:hover {
+    border-color: rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.04);
+  }
+
+  /* Checkbox pills (multi) */
+  .checkbox-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .checkbox-pill {
+    position: relative;
+  }
+
+  .checkbox-pill input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .checkbox-pill label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(255,255,255,0.06);
+    background: var(--surface-2);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .checkbox-pill input:checked + label {
+    border-color: var(--brand);
+    background: var(--brand-glow);
+    color: var(--brand-light);
+  }
+
+  .checkbox-pill label:hover {
+    border-color: rgba(255,255,255,0.12);
+  }
+
+  /* Submit button */
+  .submit-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(135deg, var(--brand), #3D8A5C);
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s;
+    margin-top: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .submit-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 32px rgba(74, 158, 107, 0.3);
+  }
+
+  .submit-btn:active {
+    transform: translateY(0);
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .submit-btn .btn-loading {
+    display: none;
+  }
+
+  .submit-btn.loading .btn-text { visibility: hidden; }
+  .submit-btn.loading .btn-loading {
+    display: block;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  /* Success state */
+  .success-card {
+    display: none;
+    text-align: center;
+    padding: 48px 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+  }
+
+  .success-card.visible { display: block; animation: fadeInUp 0.5s ease; }
+  .success-card .success-icon { font-size: 56px; margin-bottom: 16px; }
+  .success-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .success-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+
+  .share-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 24px;
+  }
+
+  .share-btn {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--surface-2);
+    color: var(--text-secondary);
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .share-btn:hover {
+    border-color: var(--brand);
+    color: var(--brand-light);
+  }
+
+  /* Features teaser */
+  .features {
+    margin: 48px 0;
+    animation: fadeInUp 0.8s ease 0.5s both;
+  }
+
+  .features-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .feature-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .feature-card {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 14px;
+    padding: 20px 16px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .feature-card:hover {
+    border-color: var(--border);
+    transform: translateY(-2px);
+  }
+
+  .feature-icon { font-size: 28px; margin-bottom: 10px; }
+  .feature-name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+  .feature-desc { font-size: 11px; color: var(--text-tertiary); line-height: 1.4; }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 48px 0 32px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .footer-bocco { font-size: 32px; margin-bottom: 8px; }
+
+  footer p {
+    font-size: 12px;
+    color: var(--text-tertiary);
+    line-height: 1.8;
+  }
+
+  footer a {
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  footer a:hover { color: var(--brand-light); }
+
+  /* Counter */
+  .signup-counter {
+    text-align: center;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--text-tertiary);
+  }
+
+  .signup-counter span {
+    color: var(--brand-light);
+    font-weight: 700;
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Mobile */
+  @media (max-width: 480px) {
+    .container { padding: 0 16px; }
+    .hero { padding: 48px 0 32px; }
+    .form-card { padding: 24px 20px; }
+    .stats-row { gap: 8px; }
+    .stat-card { padding: 16px 8px; }
+    .stat-value { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="glow-orb glow-1"></div>
+<div class="glow-orb glow-2"></div>
+
+<div class="container">
+
+  <!-- Nav -->
+  <nav>
+    <div class="logo">
+      <span class="logo-icon">🥦</span>
+      <span class="logo-text">Bocco</span>
+    </div>
+    <span class="badge-soon">Coming Soon</span>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-stat">🗑️ In Italia si sprecano 32kg di cibo a persona ogni anno</div>
+    <h1>Smetti di <span class="highlight">buttare</span> cibo e soldi</h1>
+    <p>Bocco è l'app che ti aiuta a usare tutto quello che compri. Scansiona lo scontrino, monitora le scadenze, spreca zero.</p>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-emoji">🗑️</div>
+      <div class="stat-value red">32kg</div>
+      <div class="stat-label">Sprecati / anno</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-emoji">💸</div>
+      <div class="stat-value orange">€250</div>
+      <div class="stat-label">Buttati / anno</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-emoji">🥦</div>
+      <div class="stat-value green">0</div>
+      <div class="stat-label">Con Bocco</div>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="form-section">
+    <div class="form-card" id="formCard">
+      <div class="form-title">Entra nella lista d'attesa</div>
+      <div class="form-subtitle">Accesso anticipato gratuito ai primi iscritti</div>
+
+      <form id="waitlistForm" novalidate>
+        <!-- Email -->
+        <div class="form-group">
+          <label class="form-label">La tua email</label>
+          <input type="email" class="form-input" id="emailInput" placeholder="nome@email.com" required autocomplete="email">
+        </div>
+
+        <!-- Quanto cibo butti -->
+        <div class="form-group">
+          <label class="form-label">Quanto cibo butti a settimana?</label>
+          <div class="options-grid">
+            <div class="option-pill">
+              <input type="radio" name="waste" id="waste1" value="quasi_niente">
+              <label for="waste1">🟢 Quasi niente</label>
+            </div>
+            <div class="option-pill">
+              <input type="radio" name="waste" id="waste2" value="qualcosa" checked>
+              <label for="waste2">🟡 Qualcosa</label>
+            </div>
+            <div class="option-pill">
+              <input type="radio" name="waste" id="waste3" value="troppo">
+              <label for="waste3">🔴 Troppo</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interessi -->
+        <div class="form-group">
+          <label class="form-label">Cosa ti interessa di più?</label>
+          <div class="checkbox-grid">
+            <div class="checkbox-pill">
+              <input type="checkbox" id="int1" value="scadenze">
+              <label for="int1">📅 Tracciare scadenze</label>
+            </div>
+            <div class="checkbox-pill">
+              <input type="checkbox" id="int2" value="risparmio">
+              <label for="int2">💰 Risparmiare</label>
+            </div>
+            <div class="checkbox-pill">
+              <input type="checkbox" id="int3" value="scontrino">
+              <label for="int3">📸 Scansione scontrino</label>
+            </div>
+            <div class="checkbox-pill">
+              <input type="checkbox" id="int4" value="ricette">
+              <label for="int4">🍳 Ricette intelligenti</label>
+            </div>
+            <div class="checkbox-pill">
+              <input type="checkbox" id="int5" value="lista_spesa">
+              <label for="int5">🛒 Lista della spesa</label>
+            </div>
+            <div class="checkbox-pill">
+              <input type="checkbox" id="int6" value="statistiche">
+              <label for="int6">📊 Statistiche spreco</label>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span class="btn-text">Unisciti alla lista d'attesa →</span>
+          <span class="btn-loading"><div class="spinner"></div></span>
+        </button>
+      </form>
+
+      <div class="signup-counter">
+        Già <span id="signupCount">0</span> persone in lista
+      </div>
+    </div>
+
+    <!-- Success -->
+    <div class="success-card" id="successCard">
+      <div class="success-icon">🎉</div>
+      <h3>Sei dentro!</h3>
+      <p>Ti avviseremo appena Bocco sarà disponibile.<br>Nel frattempo, spargi la voce!</p>
+      <div class="share-row">
+        <button class="share-btn" onclick="shareWhatsApp()">
+          💬 WhatsApp
+        </button>
+        <button class="share-btn" onclick="shareTwitter()">
+          🐦 Twitter
+        </button>
+        <button class="share-btn" onclick="copyLink()">
+          🔗 Copia link
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="features-title">Cosa potrà fare Bocco</div>
+    <div class="feature-row">
+      <div class="feature-card">
+        <div class="feature-icon">📸</div>
+        <div class="feature-name">Scansiona</div>
+        <div class="feature-desc">Fotografa lo scontrino, Bocco fa il resto</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⏰</div>
+        <div class="feature-name">Monitora</div>
+        <div class="feature-desc">Avvisi prima che il cibo scada</div>
+      </div>
+    </div>
+    <div class="feature-row">
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-name">Analizza</div>
+        <div class="feature-desc">Statistiche e risparmio mensile</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🏆</div>
+        <div class="feature-name">Gamifica</div>
+        <div class="feature-desc">Livelli, badge e streak anti-spreco</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-bocco">🥦</div>
+    <p>
+      Bocco — L'eroe anti-spreco<br>
+      <a href="mailto:hello@boccoapp.com">hello@boccoapp.com</a><br><br>
+      <a href="#privacy">Privacy Policy</a> · <a href="#terms">Termini di Servizio</a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+// ============================================
+// SUPABASE CONFIG — Sostituisci con i tuoi dati
+// ============================================
+const SUPABASE_URL = 'https://TUO_PROJECT.supabase.co';
+const SUPABASE_ANON_KEY = 'TUA_ANON_KEY';
+
+// ============================================
+// FORM HANDLING
+// ============================================
+
+const form = document.getElementById('waitlistForm');
+const formCard = document.getElementById('formCard');
+const successCard = document.getElementById('successCard');
+const submitBtn = document.getElementById('submitBtn');
+const emailInput = document.getElementById('emailInput');
+const signupCount = document.getElementById('signupCount');
+
+// Load signup count
+async function loadCount() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist?select=id`, {
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Prefer': 'count=exact'
+      }
+    });
+    const count = res.headers.get('content-range')?.split('/')[1] || '0';
+    signupCount.textContent = count;
+  } catch (e) {
+    signupCount.textContent = '0';
+  }
+}
+
+loadCount();
+
+// Form submit
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const email = emailInput.value.trim();
+  if (!email || !email.includes('@')) {
+    emailInput.style.borderColor = 'var(--red)';
+    emailInput.focus();
+    return;
+  }
+
+  // Collect data
+  const waste = document.querySelector('input[name="waste"]:checked')?.value || '';
+  const interests = Array.from(document.querySelectorAll('.checkbox-pill input:checked'))
+    .map(cb => cb.value);
+
+  submitBtn.classList.add('loading');
+  submitBtn.disabled = true;
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/waitlist`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        email: email,
+        weekly_waste: waste,
+        interests: interests,
+        source: window.location.href
+      })
+    });
+
+    if (res.ok || res.status === 201) {
+      formCard.style.display = 'none';
+      successCard.classList.add('visible');
+    } else {
+      const err = await res.json();
+      if (err.message?.includes('duplicate') || err.code === '23505') {
+        formCard.style.display = 'none';
+        successCard.querySelector('h3').textContent = 'Sei già in lista! 🎉';
+        successCard.querySelector('p').textContent = 'La tua email è già registrata. Ti avviseremo appena Bocco sarà disponibile.';
+        successCard.classList.add('visible');
+      } else {
+        alert('Errore. Riprova tra poco.');
+      }
+    }
+  } catch (err) {
+    alert('Errore di connessione. Riprova.');
+  }
+
+  submitBtn.classList.remove('loading');
+  submitBtn.disabled = false;
+});
+
+// Reset input style on focus
+emailInput.addEventListener('focus', () => {
+  emailInput.style.borderColor = '';
+});
+
+// Share functions
+function shareWhatsApp() {
+  const text = encodeURIComponent('Ho scoperto Bocco, un\'app per non buttare più cibo! Iscriviti alla lista d\'attesa: ' + window.location.href);
+  window.open(`https://wa.me/?text=${text}`, '_blank');
+}
+
+function shareTwitter() {
+  const text = encodeURIComponent('Basta buttare cibo! 🥦 Ho scoperto @BoccoApp, mi sono iscritto alla lista d\'attesa. Unisciti: ');
+  window.open(`https://twitter.com/intent/tweet?text=${text}&url=${encodeURIComponent(window.location.href)}`, '_blank');
+}
+
+function copyLink() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    const btn = event.target.closest('.share-btn');
+    btn.textContent = '✓ Copiato!';
+    setTimeout(() => { btn.innerHTML = '🔗 Copia link'; }, 2000);
+  });
+}
+</script>
+
+</body>
+</html>
